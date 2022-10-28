@@ -9,3 +9,14 @@ declare namespace App {
 	// interface Error {}
 	// interface Platform {}
 }
+
+declare interface Window {
+	/**
+	 * A function called by the youtube API once the page is done loading the javascript file
+	 * https://developers.google.com/youtube/iframe_api_reference#Requirements
+	 * @returns void
+	 */
+	onYouTubeIframeAPIReady: () => void;
+}
+
+type ThumbnailQuality = 'mqdefault' | 'hqdefault' | 'sddefault' | 'maxresdefault';

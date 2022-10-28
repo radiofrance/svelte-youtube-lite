@@ -4,7 +4,8 @@ specifiers:
   '@playwright/test': ^1.25.0
   '@sveltejs/adapter-auto': next
   '@sveltejs/kit': next
-  '@sveltejs/package': next
+  '@sveltejs/package': 1.0.0-next.1
+  '@types/youtube': ^0.0.47
   '@typescript-eslint/eslint-plugin': ^5.27.0
   '@typescript-eslint/parser': ^5.27.0
   eslint: ^8.16.0
@@ -24,6 +25,7 @@ devDependencies:
   '@sveltejs/adapter-auto': 1.0.0-next.84
   '@sveltejs/kit': 1.0.0-next.525_svelte@3.52.0+vite@3.2.0
   '@sveltejs/package': 1.0.0-next.1_besnmoibwkhwtentvwuriss7pa
+  '@types/youtube': 0.0.47
   '@typescript-eslint/eslint-plugin': 5.41.0_huremdigmcnkianavgfk3x6iou
   '@typescript-eslint/parser': 5.41.0_wyqvi574yv7oiwfeinomdzmc3m
   eslint: 8.26.0
@@ -298,6 +300,10 @@ packages:
 
   /@types/semver/7.3.13:
     resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
+    dev: true
+
+  /@types/youtube/0.0.47:
+    resolution: {integrity: sha512-uwqm0DUeg+2pff/8y9b22JJb+qWKOcG5aCn2yyT7hmLdK/M8+VECcK6QuNqdAR93IAqTmZeqK2nizTlQg5j+XA==}
     dev: true
 
   /@typescript-eslint/eslint-plugin/5.41.0_huremdigmcnkianavgfk3x6iou:

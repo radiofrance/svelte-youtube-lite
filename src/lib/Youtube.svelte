@@ -1,24 +1,43 @@
 <script lang="ts">
+	import { tick } from 'svelte';
+	import { createYoutubeEmbed, getYTApiRequirements } from './embedUtils';
 	import PlayButton from './PlayButton.svelte';
 
 	export let youtubeId: string = '';
+	/**
+	 * Thumbnail quality to use for the preview image.
+	 * mqdefault: lowest quality
+	 * hqdefault : medium quality
+	 * sddefault : standard quality (default)
+	 * maxresdefault: highest quality (may not be available for every video)
+	 */
+	export let thumbnail: ThumbnailQuality = 'sddefault';
 
 	let showVideo = false;
 	let embedUrl = '';
 	let thumbnailUrl = '';
 	let youtubeUrl = '';
+	let needsYTApiForAutoplay = false;
+	let YTApiScript: HTMLScriptElement;
+	let YTApiContainer: HTMLDivElement;
 
 	const params = new URLSearchParams({ autoplay: '1', playsinline: '1' });
 
 	$: youtubeId = youtubeId.startsWith('http') ? youtubeId.split('v=')[1] : youtubeId;
 	$: embedUrl = `https://www.youtube-nocookie.com/embed/${youtubeId}?${params.toString()}`;
-	$: thumbnailUrl = `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`; // props to use sddefault/maxresdefault ?
+	$: thumbnailUrl = `https://i.ytimg.com/vi/${youtubeId}/${thumbnail}.jpg`;
 	$: youtubeUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
 
-	function handleClick(event: MouseEvent) {
+	async function handleClick(event: MouseEvent) {
+		needsYTApiForAutoplay = getYTApiRequirements();
 		if (event.metaKey || event.ctrlKey) return;
 		event.preventDefault();
 		showVideo = true;
+
+		if (needsYTApiForAutoplay) {
+			await tick();
+			window.onYouTubeIframeAPIReady = createYoutubeEmbed(YTApiContainer, youtubeId, params);
+		}
 	}
 </script>
 
@@ -31,12 +50,21 @@
 	on:click={handleClick}
 >
 	{#if showVideo}
-		<iframe
-			title="Youtube video"
-			src={embedUrl}
-			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-			allowfullscreen
-		/>
+		{#if needsYTApiForAutoplay}
+			<script
+				async={true}
+				src="https://www.youtube.com/iframe_api"
+				bind:this={YTApiScript}
+			></script>
+			<div bind:this={YTApiContainer} />
+		{:else}
+			<iframe
+				title="Youtube video"
+				src={embedUrl}
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+				allowfullscreen
+			/>
+		{/if}
 	{:else}
 		<PlayButton />
 	{/if}
