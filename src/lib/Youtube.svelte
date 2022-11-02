@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tick } from 'svelte';
-	import { createYoutubeEmbed, getYTApiRequirements } from '../embedUtils';
+	import { createYoutubeEmbed, getYTApiRequirements } from './embedUtils';
 	import PlayButton from '../components/PlayButton.svelte';
 
 	/**
@@ -24,7 +24,7 @@
 	let embedUrl = '';
 	let thumbnailUrl = '';
 	let youtubeUrl = '';
-	let needsYTApiForAutoplay = true;
+	let needsYTApiForAutoplay = false;
 	let YTApiScript: HTMLScriptElement;
 	let YTApiContainer: HTMLDivElement;
 
@@ -35,7 +35,7 @@
 	$: youtubeUrl = `https://www.youtube.com/watch?v=${id}`;
 
 	async function handleClick(event: MouseEvent) {
-		// needsYTApiForAutoplay = getYTApiRequirements();
+		needsYTApiForAutoplay = getYTApiRequirements();
 		if (event.metaKey || event.ctrlKey) return;
 		event.preventDefault();
 		showVideo = true;
