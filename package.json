@@ -1,6 +1,6 @@
 {
-	"name": "svelte-yt-rgpd",
-	"version": "0.0.1",
+	"name": "svelte-youtube-lite",
+	"version": "0.1.0",
 	"svelte": "index.js",
 	"scripts": {
 		"dev": "vite dev",

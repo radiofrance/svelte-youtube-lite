@@ -1,38 +1,44 @@
-# create-svelte
+# svelte-youtube-lite
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+A simple svelte component for creating YouTube embeds with a focus on performance and privacy (GDPR compliant).
 
-## Creating a project
+- Loads the video thumbnail on page load
+- Creates the embed when the thumbnail is clicked
+- Fallback to YouTube iframe API for browsers with bad autoplay support
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Installation
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+```sh
+npm install -D svelte-youtube-lite
 ```
 
-## Developing
+## Usage
+_Run the [demo page](#run-demo-locally) locally for a preview_
+### Import
+```html
+<script>
+    import Youtube from 'svelte-youtube-lite'
+</script>
+```
+### Minimal example
+```html
+<Youtube id="QH2-TGUlwu4"/>
+```
+### With low quality thumbnail
+```html
+<Youtube id="QH2-TGUlwu4" thumbnail="mqdefault"/>
+```
+### With custom iframe title
+_(YouTube iframe API fallback uses the videos title as iframe title)_
+```html
+<Youtube id="QH2-TGUlwu4" title="Cute cat video"/>
+```
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Run demo locally
 
-```bash
+```sh
+git clone https://github.com/radiofrance/svelte-youtube-lite.git
+cd svelte-youtube-lite
+npm i
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.

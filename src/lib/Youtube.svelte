@@ -1,9 +1,16 @@
 <script lang="ts">
 	import { tick } from 'svelte';
-	import { createYoutubeEmbed, getYTApiRequirements } from './embedUtils';
-	import PlayButton from './PlayButton.svelte';
+	import { createYoutubeEmbed, getYTApiRequirements } from '../embedUtils';
+	import PlayButton from '../components/PlayButton.svelte';
 
-	export let youtubeId: string = '';
+	/**
+	 * YouTube video ID
+	 */
+	export let id: string;
+	/**
+	 * Appears in the iframe's title attribute
+	 */
+	export let title: string = 'Youtube video';
 	/**
 	 * Thumbnail quality to use for the preview image.
 	 * mqdefault: lowest quality
@@ -17,26 +24,25 @@
 	let embedUrl = '';
 	let thumbnailUrl = '';
 	let youtubeUrl = '';
-	let needsYTApiForAutoplay = false;
+	let needsYTApiForAutoplay = true;
 	let YTApiScript: HTMLScriptElement;
 	let YTApiContainer: HTMLDivElement;
 
 	const params = new URLSearchParams({ autoplay: '1', playsinline: '1' });
 
-	$: youtubeId = youtubeId.startsWith('http') ? youtubeId.split('v=')[1] : youtubeId;
-	$: embedUrl = `https://www.youtube-nocookie.com/embed/${youtubeId}?${params.toString()}`;
-	$: thumbnailUrl = `https://i.ytimg.com/vi/${youtubeId}/${thumbnail}.jpg`;
-	$: youtubeUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
+	$: embedUrl = `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`;
+	$: thumbnailUrl = `https://i.ytimg.com/vi/${id}/${thumbnail}.jpg`;
+	$: youtubeUrl = `https://www.youtube.com/watch?v=${id}`;
 
 	async function handleClick(event: MouseEvent) {
-		needsYTApiForAutoplay = getYTApiRequirements();
+		// needsYTApiForAutoplay = getYTApiRequirements();
 		if (event.metaKey || event.ctrlKey) return;
 		event.preventDefault();
 		showVideo = true;
 
 		if (needsYTApiForAutoplay) {
 			await tick();
-			window.onYouTubeIframeAPIReady = createYoutubeEmbed(YTApiContainer, youtubeId, params);
+			window.onYouTubeIframeAPIReady = createYoutubeEmbed(YTApiContainer, id, params);
 		}
 	}
 </script>
@@ -59,7 +65,7 @@
 			<div bind:this={YTApiContainer} />
 		{:else}
 			<iframe
-				title="Youtube video"
+				{title}
 				src={embedUrl}
 				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 				allowfullscreen

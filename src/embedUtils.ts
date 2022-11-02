@@ -1,6 +1,6 @@
 export function getYTApiRequirements() {
 	// navigator.vendor seems to be deprecated : https://developer.mozilla.org/en-US/docs/Web/API/Navigator/vendor
-	return navigator?.vendor.includes('Apple') || navigator?.userAgent.includes('Mobi');
+	return window.navigator?.vendor.includes('Apple') || window.navigator?.userAgent.includes('Mobi');
 }
 
 export function createYoutubeEmbed(
