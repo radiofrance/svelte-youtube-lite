@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { tick } from 'svelte';
 	import { createYoutubeEmbed, getYTApiRequirements } from './embedUtils';
-	import PlayButton from '../components/PlayButton.svelte';
+	import PlayButton from './PlayButton.svelte';
 
 	/**
 	 * YouTube video ID
 	 */
 	export let id: string;
 	/**
-	 * Appears in the iframe's title attribute
+	 * Appears in the iframe's title attribute and in the top section of the preview
 	 */
 	export let title: string = 'Youtube video';
 	/**
@@ -19,6 +19,11 @@
 	 * maxresdefault: highest quality (may not be available for every video)
 	 */
 	export let thumbnail: ThumbnailQuality = 'sddefault';
+
+	/**
+	 * Show or hide the title section in the top section of the preview
+	*/
+	export let showTitle: boolean = true;
 
 	let showVideo = false;
 	let embedUrl = '';
@@ -72,11 +77,30 @@
 			/>
 		{/if}
 	{:else}
+		{#if showTitle}
+			<div class="title">{title}</div>
+		{/if}
 		<PlayButton />
 	{/if}
 </a>
 
 <style>
+	.title {
+		position: absolute;
+		top: 0;
+		height: 50px;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 20px 10px 10px 20px;
+		font-family: "YouTube Noto",Roboto,Arial,Helvetica,sans-serif;
+		font-size: 18px;
+		color: #fff;
+		text-shadow: 0 0 2px rgb(0 0 0 / 50%);
+		text-overflow: ellipsis;
+    	overflow: hidden;
+		background: rgb(0,0,0);
+		background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.66) 100%);
+	}
 	.Youtube {
 		display: block;
 		position: relative;

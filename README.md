@@ -34,6 +34,11 @@ _(YouTube iframe API fallback uses the videos title as iframe title)_
 <Youtube id="QH2-TGUlwu4" title="Cute cat video"/>
 ```
 
+### Without title
+```html
+<Youtube id="QH2-TGUlwu4" showTitle={false}/>
+```
+
 ## Run demo locally
 
 ```sh
