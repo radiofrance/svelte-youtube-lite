@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { tick } from 'svelte';
-	import { createYoutubeEmbed, getYTApiRequirements } from './embedUtils';
 	import PlayButton from './PlayButton.svelte';
 
 	/**
@@ -46,8 +45,32 @@
 
 		if (needsYTApiForAutoplay) {
 			await tick();
-			window.onYouTubeIframeAPIReady = createYoutubeEmbed(YTApiContainer, id, params);
+			window.onYouTubeIframeAPIReady = createYoutubeEmbed();
 		}
+	}
+
+	function getYTApiRequirements() {
+		// navigator.vendor seems to be deprecated : https://developer.mozilla.org/en-US/docs/Web/API/Navigator/vendor
+		return (
+			window.navigator?.vendor.includes('Apple') || window.navigator?.userAgent.includes('Mobi')
+		);
+	}
+
+	function createYoutubeEmbed() {
+		return () => {
+			const paramsObj = Object.fromEntries(params.entries());
+			new window.YT.Player(YTApiContainer, {
+				width: '100%',
+				host: 'https://www.youtube-nocookie.com',
+				videoId: id,
+				playerVars: paramsObj,
+				events: {
+					onReady: (event) => {
+						event.target.playVideo();
+					}
+				}
+			});
+		};
 	}
 </script>
 
