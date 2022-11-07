@@ -10,7 +10,7 @@
 	/**
 	 * Appears in the iframe's title attribute and in the top section of the preview
 	 */
-	export let title: string = 'Youtube video';
+	export let title: string = '';
 	/**
 	 * Thumbnail quality to use for the preview image.
 	 * mqdefault: lowest quality
@@ -22,7 +22,7 @@
 
 	/**
 	 * Show or hide the title section in the top section of the preview
-	*/
+	 */
 	export let showTitle: boolean = true;
 
 	let showVideo = false;
@@ -30,7 +30,6 @@
 	let thumbnailUrl = '';
 	let youtubeUrl = '';
 	let needsYTApiForAutoplay = false;
-	let YTApiScript: HTMLScriptElement;
 	let YTApiContainer: HTMLDivElement;
 
 	const params = new URLSearchParams({ autoplay: '1', playsinline: '1' });
@@ -62,22 +61,18 @@
 >
 	{#if showVideo}
 		{#if needsYTApiForAutoplay}
-			<script
-				async={true}
-				src="https://www.youtube.com/iframe_api"
-				bind:this={YTApiScript}
-			></script>
+			<script async={true} src="https://www.youtube.com/iframe_api"></script>
 			<div bind:this={YTApiContainer} />
 		{:else}
 			<iframe
-				{title}
+				title={title || 'YouTube video'}
 				src={embedUrl}
 				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 				allowfullscreen
 			/>
 		{/if}
 	{:else}
-		{#if showTitle}
+		{#if showTitle && title}
 			<div class="title">{title}</div>
 		{/if}
 		<PlayButton />
@@ -92,14 +87,14 @@
 		width: 100%;
 		box-sizing: border-box;
 		padding: 20px 10px 10px 20px;
-		font-family: "YouTube Noto",Roboto,Arial,Helvetica,sans-serif;
+		font-family: 'YouTube Noto', Roboto, Arial, Helvetica, sans-serif;
 		font-size: 18px;
 		color: #fff;
 		text-shadow: 0 0 2px rgb(0 0 0 / 50%);
 		text-overflow: ellipsis;
-    	overflow: hidden;
-		background: rgb(0,0,0);
-		background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.66) 100%);
+		overflow: hidden;
+		background: rgb(0, 0, 0);
+		background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.66) 100%);
 	}
 	.Youtube {
 		display: block;

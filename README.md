@@ -13,30 +13,41 @@ npm install -D svelte-youtube-lite
 ```
 
 ## Usage
+
 _Run the [demo page](#run-demo-locally) locally for a preview_
+
 ### Import
+
 ```html
 <script>
-    import Youtube from 'svelte-youtube-lite'
+	import Youtube from 'svelte-youtube-lite';
 </script>
 ```
+
 ### Minimal example
+
 ```html
-<Youtube id="QH2-TGUlwu4"/>
+<Youtube id="QH2-TGUlwu4" />
 ```
+
 ### With low quality thumbnail
+
 ```html
-<Youtube id="QH2-TGUlwu4" thumbnail="mqdefault"/>
+<Youtube id="QH2-TGUlwu4" thumbnail="mqdefault" />
 ```
+
 ### With custom iframe title
+
 _(YouTube iframe API fallback uses the videos title as iframe title)_
+
 ```html
-<Youtube id="QH2-TGUlwu4" title="Cute cat video"/>
+<Youtube id="QH2-TGUlwu4" title="Cute cat video" />
 ```
 
 ### Without title
+
 ```html
-<Youtube id="QH2-TGUlwu4" showTitle={false}/>
+<Youtube id="QH2-TGUlwu4" showTitle="{false}" />
 ```
 
 ## Run demo locally
