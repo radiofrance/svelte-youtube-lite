@@ -2,6 +2,7 @@
 	"name": "svelte-youtube-lite",
 	"version": "0.3.0",
 	"svelte": "index.js",
+	"repository": "github:radiofrance/svelte-youtube-lite",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "svelte-kit sync && svelte-package",

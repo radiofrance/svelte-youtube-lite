@@ -1,5 +1,5 @@
 <script>
-	import Youtube from '$lib/Youtube.svelte';
+	import { Youtube } from '$lib/index';
 </script>
 
 <h1>svelte-youtube-lite demo</h1>

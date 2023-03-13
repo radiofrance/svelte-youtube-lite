@@ -20,7 +20,7 @@ _Run the [demo page](#run-demo-locally) locally for a preview_
 
 ```html
 <script>
-	import Youtube from 'svelte-youtube-lite';
+	import { Youtube } from 'svelte-youtube-lite';
 </script>
 ```
 
@@ -58,3 +58,12 @@ cd svelte-youtube-lite
 npm i
 npm run dev
 ```
+
+## Todo
+
+- [ ] support for full youtube urls (eg: with playlist and start time) ?
+- [ ] support for youtube shorts ? change from 16:9 to vertical ?
+- [ ] use preconnect for all youtube iframe assets
+- [ ] parameter (boolean) : load with intersection observer
+- [ ] parameter (number) : start time
+- [ ] parameter (string) : playlist id
