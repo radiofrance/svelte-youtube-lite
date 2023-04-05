@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { tick } from 'svelte';
 	import PlayButton from './PlayButton.svelte';
 
 	/**
@@ -28,8 +27,6 @@
 	let embedUrl = '';
 	let thumbnailUrl = '';
 	let youtubeUrl = '';
-	let needsYTApiForAutoplay = false;
-	let YTApiContainer: HTMLDivElement;
 
 	const params = new URLSearchParams({ autoplay: '1', playsinline: '1' });
 
@@ -38,39 +35,9 @@
 	$: youtubeUrl = `https://www.youtube.com/watch?v=${id}`;
 
 	async function handleClick(event: MouseEvent) {
-		needsYTApiForAutoplay = getYTApiRequirements();
 		if (event.metaKey || event.ctrlKey) return;
 		event.preventDefault();
 		showVideo = true;
-
-		if (needsYTApiForAutoplay) {
-			await tick();
-			window.onYouTubeIframeAPIReady = createYoutubeEmbed();
-		}
-	}
-
-	function getYTApiRequirements() {
-		// navigator.vendor seems to be deprecated : https://developer.mozilla.org/en-US/docs/Web/API/Navigator/vendor
-		return (
-			window.navigator?.vendor.includes('Apple') || window.navigator?.userAgent.includes('Mobi')
-		);
-	}
-
-	function createYoutubeEmbed() {
-		return () => {
-			const paramsObj = Object.fromEntries(params.entries());
-			new window.YT.Player(YTApiContainer, {
-				width: '100%',
-				host: 'https://www.youtube-nocookie.com',
-				videoId: id,
-				playerVars: paramsObj,
-				events: {
-					onReady: (event) => {
-						event.target.playVideo();
-					}
-				}
-			});
-		};
 	}
 </script>
 
@@ -83,17 +50,12 @@
 	on:click={handleClick}
 >
 	{#if showVideo}
-		{#if needsYTApiForAutoplay}
-			<script async={true} src="https://www.youtube.com/iframe_api"></script>
-			<div bind:this={YTApiContainer} />
-		{:else}
-			<iframe
-				title={title || 'YouTube video'}
-				src={embedUrl}
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-				allowfullscreen
-			/>
-		{/if}
+		<iframe
+			title={title || 'YouTube video'}
+			src={embedUrl}
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+			allowfullscreen
+		/>
 	{:else}
 		{#if showTitle && title}
 			<div class="title">{title}</div>
