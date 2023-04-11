@@ -4,7 +4,6 @@ A simple svelte component for creating YouTube embeds with a focus on performanc
 
 - Loads the video thumbnail on page load
 - Creates the embed when the thumbnail is clicked
-- Fallback to YouTube iframe API for browsers with bad autoplay support
 
 ## Installation
 
@@ -63,7 +62,8 @@ npm run dev
 
 - [ ] support for full youtube urls (eg: with playlist and start time) ?
 - [ ] support for youtube shorts ? change from 16:9 to vertical ?
-- [ ] use preconnect for all youtube iframe assets
+- [ ] use DNS preconnect for all youtube iframe assets
 - [ ] parameter (boolean) : load with intersection observer
 - [ ] parameter (number) : start time
 - [ ] parameter (string) : playlist id
+- [ ] fallback to YouTube iframe API for browsers with bad autoplay support
