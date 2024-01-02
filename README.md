@@ -26,13 +26,13 @@ _Run the [demo page](#run-demo-locally) locally for a preview_
 ### Minimal example
 
 ```html
-<Youtube id="QH2-TGUlwu4" />
+<Youtube id="aYtE6XE6b_s" />
 ```
 
 ### With low quality thumbnail
 
 ```html
-<Youtube id="QH2-TGUlwu4" thumbnail="mqdefault" />
+<Youtube id="aYtE6XE6b_s" thumbnail="mqdefault" />
 ```
 
 ### With custom iframe title
@@ -40,13 +40,13 @@ _Run the [demo page](#run-demo-locally) locally for a preview_
 _(YouTube iframe API fallback uses the videos title as iframe title)_
 
 ```html
-<Youtube id="QH2-TGUlwu4" title="Cute cat video" />
+<Youtube id="aYtE6XE6b_s" title="Cute cat video" />
 ```
 
 ### Without title
 
 ```html
-<Youtube id="QH2-TGUlwu4" showTitle="{false}" />
+<Youtube id="aYtE6XE6b_s" showTitle="{false}" />
 ```
 
 ## Run demo locally

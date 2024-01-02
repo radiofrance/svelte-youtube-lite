@@ -1,6 +1,8 @@
 <script lang="ts">
 	import PlayButton from './PlayButton.svelte';
 
+	type ThumbnailQuality = 'mqdefault' | 'hqdefault' | 'sddefault' | 'maxresdefault';
+
 	/**
 	 * YouTube video ID
 	 */
