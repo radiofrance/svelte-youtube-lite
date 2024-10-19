@@ -1,4 +1,9 @@
-<button class="PlayButton" />
+<script lang="ts">
+	export let ariaLabel: string = 'Play video';
+	export let title: string = 'Play video';
+</script>
+
+<button class="PlayButton" aria-label={ariaLabel} title={title} />
 
 <style>
 	.PlayButton {

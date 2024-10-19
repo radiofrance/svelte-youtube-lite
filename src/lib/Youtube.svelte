@@ -62,7 +62,11 @@
 		{#if showTitle && title}
 			<div class="title">{title}</div>
 		{/if}
-		<PlayButton />
+		{#if $$slots.playButton}
+			<slot name="playButton" />
+		{:else}
+			<PlayButton />
+		{/if}
 	{/if}
 </a>
 
