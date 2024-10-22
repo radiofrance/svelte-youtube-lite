@@ -1,5 +1,6 @@
 <script>
 	import Youtube from '$lib/Youtube.svelte';
+	import PlayButton from '$lib/PlayButton.svelte';
 </script>
 
 <div class="page">
@@ -17,6 +18,16 @@
 
 	<h2>Without title</h2>
 	<Youtube id="aYtE6XE6b_s" showTitle={false} />
+
+  <h2>With custom aria label button</h2>
+	<Youtube id="aYtE6XE6b_s" showTitle={false}>
+    <PlayButton slot="playButton" ariaLabel="Custom play button" />
+  </Youtube>
+
+	<h2>With custom button</h2>
+	<Youtube id="aYtE6XE6b_s" showTitle={false}>
+    <button slot="playButton" style="position: absolute; left: 50%; top: 50%; transform: translate3d(-50%, -50%, 0);">A completely custom button</button>
+  </Youtube>
 </div>
 
 <style>
