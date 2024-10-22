@@ -21,9 +21,7 @@
 
   <h2>With custom aria label button</h2>
 	<Youtube id="aYtE6XE6b_s" showTitle={false}>
-    <slot name="playButton">
-      <PlayButton ariaLabel="Custom play button" />
-    </slot>
+    <PlayButton slot="playButton" ariaLabel="Custom play button" />
   </Youtube>
 
 	<h2>With custom button</h2>
