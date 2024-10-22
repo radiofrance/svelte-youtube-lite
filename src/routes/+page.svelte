@@ -26,9 +26,7 @@
 
 	<h2>With custom button</h2>
 	<Youtube id="aYtE6XE6b_s" showTitle={false}>
-    <slot name="playButton">
-      <button>A completely custom button</button>
-    </slot>
+    <button slot="playButton">A completely custom button</button>
   </Youtube>
 </div>
 
