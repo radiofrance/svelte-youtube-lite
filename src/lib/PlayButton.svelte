@@ -3,7 +3,7 @@
 	export let title: string = 'Play video';
 </script>
 
-<button class="PlayButton" aria-label={ariaLabel} title={title} />
+<button class="PlayButton" aria-label={ariaLabel} {title}></button>
 
 <style>
 	.PlayButton {
