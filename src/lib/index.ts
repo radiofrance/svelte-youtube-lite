@@ -1,3 +1,4 @@
 // Reexport your entry components here
 import Youtube from './Youtube.svelte';
-export { Youtube };
+import PlayButton from './PlayButton.svelte';
+export { Youtube, PlayButton };

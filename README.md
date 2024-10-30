@@ -5,6 +5,10 @@ A simple svelte component for creating YouTube embeds with a focus on performanc
 - Loads the video thumbnail on page load
 - Creates the embed when the thumbnail is clicked
 
+## Compatibility
+
+Version `1.0.0` and above are compatible with Svelte 5. For Svelte 4 projects, use `^0.6.0`
+
 ## Installation
 
 ```sh
@@ -49,6 +53,20 @@ _(YouTube iframe API fallback uses the videos title as iframe title)_
 <Youtube id="aYtE6XE6b_s" showTitle="{false}" />
 ```
 
+### Custom Play Button
+
+If you want to use a custom play button, you can use the `snippet` slot to add your own button. A `PlayButton` component is also provided if you simply want to change the `title` and `aria-label` of the default play button.
+
+```html
+<Youtube {id} showTitle="{false}">
+	{#snippet playButton()}
+	<button style="position: absolute; left: 50%; top: 50%; transform: translate3d(-50%, -50%, 0);">
+		A completely custom button
+	</button>
+	{/snippet}
+</Youtube>
+```
+
 ## Run demo locally
 
 ```sh
@@ -67,3 +85,7 @@ npm run dev
 - [ ] parameter (number) : start time
 - [ ] parameter (string) : playlist id
 - [ ] fallback to YouTube iframe API for browsers with bad autoplay support
+
+```
+
+```
