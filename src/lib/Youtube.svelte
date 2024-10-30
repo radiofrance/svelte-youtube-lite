@@ -65,7 +65,7 @@
 			<div class="title">{title}</div>
 		{/if}
 		{#if playButton}
-			{@render playButton?.()}
+			{@render playButton()}
 		{:else}
 			<PlayButton />
 		{/if}
