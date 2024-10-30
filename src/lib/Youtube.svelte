@@ -1,40 +1,42 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import PlayButton from './PlayButton.svelte';
 
 	type ThumbnailQuality = 'mqdefault' | 'hqdefault' | 'sddefault' | 'maxresdefault';
 
-	/**
-	 * YouTube video ID
-	 */
-	export let id: string;
-	/**
-	 * Appears in the iframe's title attribute and in the top section of the preview
-	 */
-	export let title: string = '';
-	/**
-	 * Thumbnail quality to use for the preview image.
-	 * mqdefault: lowest quality
-	 * hqdefault : medium quality
-	 * sddefault : standard quality (default)
-	 * maxresdefault: highest quality (may not be available for every video)
-	 */
-	export let thumbnail: ThumbnailQuality = 'sddefault';
+	interface Props {
+		/**
+		 * YouTube video ID
+		 */
+		id: string;
+		/**
+		 * Appears in the iframe's title attribute and in the top section of the preview
+		 */
+		title?: string;
+		/**
+		 * Thumbnail quality to use for the preview image.
+		 * mqdefault: lowest quality
+		 * hqdefault : medium quality
+		 * sddefault : standard quality (default)
+		 * maxresdefault: highest quality (may not be available for every video)
+		 */
+		thumbnail?: ThumbnailQuality;
+		/**
+		 * Show or hide the title section in the top section of the preview
+		 */
+		showTitle?: boolean;
+		playButton?: Snippet;
+	}
 
-	/**
-	 * Show or hide the title section in the top section of the preview
-	 */
-	export let showTitle: boolean = true;
-
-	let showVideo = false;
-	let embedUrl = '';
-	let thumbnailUrl = '';
-	let youtubeUrl = '';
+	let { id, title = '', thumbnail = 'sddefault', showTitle = true, playButton }: Props = $props();
 
 	const params = new URLSearchParams({ autoplay: '1', playsinline: '1' });
 
-	$: embedUrl = `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`;
-	$: thumbnailUrl = `https://i.ytimg.com/vi/${id}/${thumbnail}.jpg`;
-	$: youtubeUrl = `https://www.youtube.com/watch?v=${id}`;
+	let showVideo = $state(false);
+
+	let embedUrl = $derived(`https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`);
+	let thumbnailUrl = $derived(`https://i.ytimg.com/vi/${id}/${thumbnail}.jpg`);
+	let youtubeUrl = $derived(`https://www.youtube.com/watch?v=${id}`);
 
 	async function handleClick(event: MouseEvent) {
 		if (event.metaKey || event.ctrlKey) return;
@@ -49,7 +51,7 @@
 	rel="noopener noreferrer"
 	class="Youtube"
 	style="background-image: url({thumbnailUrl});"
-	on:click={handleClick}
+	onclick={handleClick}
 >
 	{#if showVideo}
 		<iframe
@@ -57,13 +59,13 @@
 			src={embedUrl}
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 			allowfullscreen
-		/>
+		></iframe>
 	{:else}
 		{#if showTitle && title}
 			<div class="title">{title}</div>
 		{/if}
-		{#if $$slots.playButton}
-			<slot name="playButton" />
+		{#if playButton}
+			{@render playButton()}
 		{:else}
 			<PlayButton />
 		{/if}
@@ -84,8 +86,8 @@
 		text-shadow: 0 0 2px rgb(0 0 0 / 50%);
 		text-overflow: ellipsis;
 		overflow: hidden;
-		background: rgb(0, 0, 0);
-		background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.66) 100%);
+		background: rgb(0 0 0);
+		background: linear-gradient(0deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 66%) 100%);
 	}
 	.Youtube {
 		display: block;

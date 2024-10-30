@@ -1,9 +1,13 @@
 <script lang="ts">
-	export let ariaLabel: string = 'Play video';
-	export let title: string = 'Play video';
+	interface Props {
+		ariaLabel?: string;
+		title?: string;
+	}
+
+	let { ariaLabel = 'Play video', title = 'Play video' }: Props = $props();
 </script>
 
-<button class="PlayButton" aria-label={ariaLabel} title={title} />
+<button class="PlayButton" aria-label={ariaLabel} {title}></button>
 
 <style>
 	.PlayButton {
