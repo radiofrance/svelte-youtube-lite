@@ -57,7 +57,7 @@
 			src={embedUrl}
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 			allowfullscreen
-		/>
+		></iframe>
 	{:else}
 		{#if showTitle && title}
 			<div class="title">{title}</div>
