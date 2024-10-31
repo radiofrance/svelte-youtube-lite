@@ -7,7 +7,7 @@ A simple svelte component for creating YouTube embeds with a focus on performanc
 
 ## Compatibility
 
-Version `1.0.0` and above are compatible with Svelte 5. For Svelte 4 projects, use `^0.6.0`
+Version `1.0.0` and above are compatible with Svelte 5 (branch `main`). For Svelte 4 projects, use `^0.6.0` (branch `svelte4`)
 
 ## Installation
 
