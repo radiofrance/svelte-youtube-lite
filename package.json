@@ -1,6 +1,6 @@
 {
 	"name": "svelte-youtube-lite",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"repository": "github:radiofrance/svelte-youtube-lite",
 	"scripts": {
 		"dev": "vite dev",
