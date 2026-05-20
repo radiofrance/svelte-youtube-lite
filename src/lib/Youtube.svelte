@@ -34,6 +34,11 @@
 		 * Height of the video container (e.g. '100%', '300px')
 		 */
 		height?: string;
+    
+    /*
+     * Additional or override parameters for the YouTube iframe
+		 */
+		params?: Record<string, string>;
 	}
 
 	let { 
@@ -43,14 +48,15 @@
 		showTitle = true, 
 		playButton,
 		width = '100%',
-		height = '100%'
+		height = '100%',
+    params = {},
 	}: Props = $props();
 
-	const params = new URLSearchParams({ autoplay: '1', playsinline: '1' });
+	const urlParams = new URLSearchParams({ autoplay: '1', playsinline: '1', ...params });
 
 	let showVideo = $state(false);
 
-	let embedUrl = $derived(`https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`);
+	let embedUrl = $derived(`https://www.youtube-nocookie.com/embed/${id}?${urlParams.toString()}`);
 	let thumbnailUrl = $derived(`https://i.ytimg.com/vi/${id}/${thumbnail}.jpg`);
 	let youtubeUrl = $derived(`https://www.youtube.com/watch?v=${id}`);
 
