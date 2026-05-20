@@ -37,6 +37,11 @@
 			>
 		{/snippet}
 	</Youtube>
+
+	<h2>With custom player parameters</h2>
+	<p>Video starts at 30s and is muted</p>
+	<Youtube {id} params={{ start: '30', mute: '1' }} />
+
 </div>
 
 <style>

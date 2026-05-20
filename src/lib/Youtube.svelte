@@ -26,15 +26,19 @@
 		 */
 		showTitle?: boolean;
 		playButton?: Snippet;
+		/**
+		 * Additional or override parameters for the YouTube iframe
+		 */
+		params?: Record<string, string>;
 	}
 
-	let { id, title = '', thumbnail = 'sddefault', showTitle = true, playButton }: Props = $props();
+	let { id, title = '', thumbnail = 'sddefault', showTitle = true, playButton, params = {} }: Props = $props();
 
-	const params = new URLSearchParams({ autoplay: '1', playsinline: '1' });
+	const urlParams = new URLSearchParams({ autoplay: '1', playsinline: '1', ...params });
 
 	let showVideo = $state(false);
 
-	let embedUrl = $derived(`https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`);
+	let embedUrl = $derived(`https://www.youtube-nocookie.com/embed/${id}?${urlParams.toString()}`);
 	let thumbnailUrl = $derived(`https://i.ytimg.com/vi/${id}/${thumbnail}.jpg`);
 	let youtubeUrl = $derived(`https://www.youtube.com/watch?v=${id}`);
 
