@@ -8,27 +8,37 @@
 <div class="page">
 	<h1>svelte-youtube-lite demo</h1>
 
-	<h2>Minimal example</h2>
-	<Youtube {id} />
+	<h2>Basic Example (Fits Container Size)</h2>
+	<div class="container">
+		<Youtube {id} />
+	</div>
 
-	<h2>With low quality thumbnail</h2>
+	<h2>Fixed Size Example</h2>
+	<Youtube {id} width="100px" height="100px" />
+
+	<h2>Responsive Size Example</h2>
+	<div class="responsive-container">
+		<Youtube {id} width="100%" height="100%" />
+	</div>
+
+	<h2>Low Quality Thumbnail</h2>
 	<Youtube {id} thumbnail="mqdefault" />
 
-	<h2>With custom iframe title</h2>
-	<p><em>(YouTube iframe API fallback uses the videos title as iframe title)</em></p>
+	<h2>Custom iframe Title</h2>
+	<p><em>(YouTube iframe API fallback uses the video's title as iframe title)</em></p>
 	<Youtube {id} title="Cute cat video" />
 
-	<h2>Without title</h2>
+	<h2>Without Title</h2>
 	<Youtube {id} showTitle={false} />
 
-	<h2>With custom aria label button</h2>
+	<h2>Custom aria label button</h2>
 	<Youtube {id} showTitle={false}>
 		{#snippet playButton()}
 			<PlayButton ariaLabel="Custom play button" />
 		{/snippet}
 	</Youtube>
 
-	<h2>With custom button</h2>
+	<h2>Custom button</h2>
 	<Youtube {id} showTitle={false}>
 		{#snippet playButton()}
 			<button
@@ -49,5 +59,23 @@
 		max-width: 608px;
 		margin-left: auto;
 		margin-right: auto;
+	}
+
+	.container {
+		width: 100%;
+		height: 300px;
+		margin-bottom: 2rem;
+	}
+
+	.responsive-container {
+		width: 100%;
+		height: 400px;
+		margin-bottom: 2rem;
+	}
+
+	@media (max-width: 768px) {
+		.responsive-container {
+			height: 300px;
+		}
 	}
 </style>

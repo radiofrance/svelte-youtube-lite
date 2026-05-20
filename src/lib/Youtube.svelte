@@ -27,12 +27,30 @@
 		showTitle?: boolean;
 		playButton?: Snippet;
 		/**
-		 * Additional or override parameters for the YouTube iframe
+		 * Width of the video container (e.g. '100%', '500px')
+		 */
+		width?: string;
+		/**
+		 * Height of the video container (e.g. '100%', '300px')
+		 */
+		height?: string;
+    
+    /*
+     * Additional or override parameters for the YouTube iframe
 		 */
 		params?: Record<string, string>;
 	}
 
-	let { id, title = '', thumbnail = 'sddefault', showTitle = true, playButton, params = {} }: Props = $props();
+	let { 
+		id, 
+		title = '', 
+		thumbnail = 'sddefault', 
+		showTitle = true, 
+		playButton,
+		width = '100%',
+		height = '100%',
+    params = {},
+	}: Props = $props();
 
 	const urlParams = new URLSearchParams({ autoplay: '1', playsinline: '1', ...params });
 
@@ -54,7 +72,7 @@
 	target="_blank"
 	rel="noopener noreferrer"
 	class="Youtube"
-	style="background-image: url({thumbnailUrl});"
+	style="background-image: url({thumbnailUrl}); --width: {width}; --height: {height};"
 	onclick={handleClick}
 >
 	{#if showVideo}
@@ -99,7 +117,8 @@
 		background-position: center center;
 		background-size: cover;
 		cursor: pointer;
-		max-width: 720px;
+		width: var(--width);
+		height: var(--height);
 	}
 
 	:global(.Youtube:hover .PlayButton) {
