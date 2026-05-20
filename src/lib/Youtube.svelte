@@ -34,22 +34,22 @@
 		 * Height of the video container (e.g. '100%', '300px')
 		 */
 		height?: string;
-    
-    /*
-     * Additional or override parameters for the YouTube iframe
+
+		/*
+		 * Additional or override parameters for the YouTube iframe
 		 */
 		params?: Record<string, string>;
 	}
 
-	let { 
-		id, 
-		title = '', 
-		thumbnail = 'sddefault', 
-		showTitle = true, 
+	let {
+		id,
+		title = '',
+		thumbnail = 'sddefault',
+		showTitle = true,
 		playButton,
 		width = '100%',
 		height = '100%',
-    params = {},
+		params = {}
 	}: Props = $props();
 
 	const urlParams = new URLSearchParams({ autoplay: '1', playsinline: '1', ...params });
