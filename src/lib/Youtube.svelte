@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import PlayButton from './PlayButton.svelte';
 
@@ -27,6 +28,11 @@
 		showTitle?: boolean;
 		playButton?: Snippet;
 		/**
+		 * Load the thumbnail only when the component enters the viewport.
+		 * Falls back to immediate loading when IntersectionObserver is unavailable.
+		 */
+		lazy?: boolean;
+		/**
 		 * Width of the video container (e.g. '100%', '500px')
 		 */
 		width?: string;
@@ -47,18 +53,53 @@
 		thumbnail = 'sddefault',
 		showTitle = true,
 		playButton,
+		lazy = false,
 		width = '100%',
 		height = '100%',
 		params = {}
 	}: Props = $props();
 
-	const urlParams = new URLSearchParams({ autoplay: '1', playsinline: '1', ...params });
-
 	let showVideo = $state(false);
+	let element: HTMLAnchorElement | undefined;
+	let hasLoadedThumbnail = $state(false);
+	let shouldLoadThumbnail = $derived(!lazy || hasLoadedThumbnail);
 
-	let embedUrl = $derived(`https://www.youtube-nocookie.com/embed/${id}?${urlParams.toString()}`);
+	let embedUrl = $derived(
+		`https://www.youtube-nocookie.com/embed/${id}?${new URLSearchParams({
+			autoplay: '1',
+			playsinline: '1',
+			...params
+		}).toString()}`
+	);
 	let thumbnailUrl = $derived(`https://i.ytimg.com/vi/${id}/${thumbnail}.jpg`);
 	let youtubeUrl = $derived(`https://www.youtube.com/watch?v=${id}`);
+
+	onMount(() => {
+		if (!lazy || shouldLoadThumbnail) return;
+
+		if (!('IntersectionObserver' in window)) {
+			hasLoadedThumbnail = true;
+			return;
+		}
+
+		if (!element) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (!entries.some((entry) => entry.isIntersecting)) return;
+
+				hasLoadedThumbnail = true;
+				observer.disconnect();
+			},
+			{ rootMargin: '200px' }
+		);
+
+		observer.observe(element);
+
+		return () => {
+			observer.disconnect();
+		};
+	});
 
 	async function handleClick(event: MouseEvent) {
 		if (event.metaKey || event.ctrlKey) return;
@@ -68,11 +109,14 @@
 </script>
 
 <a
+	bind:this={element}
 	href={youtubeUrl}
 	target="_blank"
 	rel="noopener noreferrer"
 	class="Youtube"
-	style="background-image: url({thumbnailUrl}); --width: {width}; --height: {height};"
+	style="background-image: {shouldLoadThumbnail
+		? `url(${thumbnailUrl})`
+		: 'none'}; --width: {width}; --height: {height};"
 	onclick={handleClick}
 >
 	{#if showVideo}

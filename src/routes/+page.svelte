@@ -24,6 +24,9 @@
 	<h2>Low Quality Thumbnail</h2>
 	<Youtube {id} thumbnail="mqdefault" />
 
+	<h2>Lazy Loaded Thumbnail</h2>
+	<p><a href="/page_lazy">Open the lazy loading demo page</a></p>
+
 	<h2>Custom iframe Title</h2>
 	<p><em>(YouTube iframe API fallback uses the video's title as iframe title)</em></p>
 	<Youtube {id} title="Cute cat video" />
