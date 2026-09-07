@@ -56,6 +56,10 @@
 	<h2>Lazy Loaded Thumbnail</h2>
 	<p>Loads only when the video enters the viewport.</p>
 	<Youtube id={lazyId} lazy title="Lazy loaded YouTube thumbnail" />
+
+	<h2>With playlist</h2>
+	<p>Plays as part of the "Official Blender Open Movies" playlist.</p>
+	<Youtube id="l5OZu-IrXpw" playlistId="PL6B3937A5D230E335" title="Singularity" />
 </div>
 
 <style>

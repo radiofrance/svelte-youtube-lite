@@ -53,6 +53,14 @@ _(YouTube iframe API fallback uses the videos title as iframe title)_
 <Youtube id="aYtE6XE6b_s" showTitle="{false}" />
 ```
 
+### With playlist
+
+Plays `id` as part of the given playlist. `id` should belong to the playlist for the "play next" behavior to make sense.
+
+```html
+<Youtube id="aYtE6XE6b_s" playlistId="PLxxxxxxxxxxxxxxxx" />
+```
+
 ### Custom Play Button
 
 If you want to use a custom play button, you can use the `snippet` slot to add your own button. A `PlayButton` component is also provided if you simply want to change the `title` and `aria-label` of the default play button.
@@ -83,5 +91,5 @@ npm run dev
 - [ ] use DNS preconnect for all youtube iframe assets
 - [x] parameter (boolean) : load with intersection observer
 - [x] parameter (number) : start time
-- [ ] parameter (string) : playlist id
+- [x] parameter (string) : playlist id
 - [ ] fallback to YouTube iframe API for browsers with bad autoplay support
