@@ -81,11 +81,7 @@ npm run dev
 - [ ] support for full youtube urls (eg: with playlist and start time) ?
 - [ ] support for youtube shorts ? change from 16:9 to vertical ?
 - [ ] use DNS preconnect for all youtube iframe assets
-- [ ] parameter (boolean) : load with intersection observer
-- [ ] parameter (number) : start time
+- [x] parameter (boolean) : load with intersection observer
+- [x] parameter (number) : start time
 - [ ] parameter (string) : playlist id
 - [ ] fallback to YouTube iframe API for browsers with bad autoplay support
-
-```
-
-```
