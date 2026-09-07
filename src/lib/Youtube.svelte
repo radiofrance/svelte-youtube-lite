@@ -38,6 +38,11 @@
 		 */
 		lazyMargin?: string;
 		/**
+		 * YouTube playlist ID to play the video alongside (passed as the `list` parameter).
+		 * `id` still selects which video plays; it should belong to this playlist.
+		 */
+		playlistId?: string;
+		/**
 		 * Width of the video container (e.g. '100%', '500px')
 		 */
 		width?: string;
@@ -60,6 +65,7 @@
 		playButton,
 		lazy = false,
 		lazyMargin = '200px',
+		playlistId,
 		width = '100%',
 		height = '100%',
 		params = {}
@@ -74,6 +80,7 @@
 		`https://www.youtube-nocookie.com/embed/${id}?${new URLSearchParams({
 			autoplay: '1',
 			playsinline: '1',
+			...(playlistId ? { list: playlistId } : {}),
 			...params
 		}).toString()}`
 	);
