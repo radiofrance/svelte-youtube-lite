@@ -33,6 +33,12 @@
 		 */
 		lazy?: boolean;
 		/**
+		 * CSS margin around the viewport used to trigger lazy thumbnail loading early,
+		 * passed as-is to IntersectionObserver's rootMargin (e.g. '200px', '10% 0px').
+		 * Only relevant when `lazy` is true.
+		 */
+		lazyMargin?: string;
+		/**
 		 * Width of the video container (e.g. '100%', '500px')
 		 */
 		width?: string;
@@ -54,6 +60,7 @@
 		showTitle = true,
 		playButton,
 		lazy = false,
+		lazyMargin = '200px',
 		width = '100%',
 		height = '100%',
 		params = {}
@@ -91,7 +98,7 @@
 				hasLoadedThumbnail = true;
 				observer.disconnect();
 			},
-			{ rootMargin: '200px' }
+			{ rootMargin: lazyMargin }
 		);
 
 		observer.observe(element);
