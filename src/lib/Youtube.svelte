@@ -27,6 +27,17 @@
 		showTitle?: boolean;
 		playButton?: Snippet;
 		/**
+		 * Load the thumbnail only when the component enters the viewport.
+		 * Falls back to immediate loading when IntersectionObserver is unavailable.
+		 */
+		lazy?: boolean;
+		/**
+		 * CSS margin around the viewport used to trigger lazy thumbnail loading early,
+		 * passed as-is to IntersectionObserver's rootMargin (e.g. '200px', '10% 0px').
+		 * Only relevant when `lazy` is true.
+		 */
+		lazyMargin?: string;
+		/**
 		 * Width of the video container (e.g. '100%', '500px')
 		 */
 		width?: string;
@@ -47,18 +58,54 @@
 		thumbnail = 'sddefault',
 		showTitle = true,
 		playButton,
+		lazy = false,
+		lazyMargin = '200px',
 		width = '100%',
 		height = '100%',
 		params = {}
 	}: Props = $props();
 
-	const urlParams = new URLSearchParams({ autoplay: '1', playsinline: '1', ...params });
-
 	let showVideo = $state(false);
+	let element: HTMLAnchorElement | undefined;
+	let hasLoadedThumbnail = $state(false);
+	let shouldLoadThumbnail = $derived(!lazy || hasLoadedThumbnail);
 
-	let embedUrl = $derived(`https://www.youtube-nocookie.com/embed/${id}?${urlParams.toString()}`);
+	let embedUrl = $derived(
+		`https://www.youtube-nocookie.com/embed/${id}?${new URLSearchParams({
+			autoplay: '1',
+			playsinline: '1',
+			...params
+		}).toString()}`
+	);
 	let thumbnailUrl = $derived(`https://i.ytimg.com/vi/${id}/${thumbnail}.jpg`);
 	let youtubeUrl = $derived(`https://www.youtube.com/watch?v=${id}`);
+
+	$effect(() => {
+		if (!lazy || hasLoadedThumbnail) return;
+
+		if (!('IntersectionObserver' in window)) {
+			hasLoadedThumbnail = true;
+			return;
+		}
+
+		if (!element) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (!entries.some((entry) => entry.isIntersecting)) return;
+
+				hasLoadedThumbnail = true;
+				observer.disconnect();
+			},
+			{ rootMargin: lazyMargin }
+		);
+
+		observer.observe(element);
+
+		return () => {
+			observer.disconnect();
+		};
+	});
 
 	async function handleClick(event: MouseEvent) {
 		if (event.metaKey || event.ctrlKey) return;
@@ -68,11 +115,14 @@
 </script>
 
 <a
+	bind:this={element}
 	href={youtubeUrl}
 	target="_blank"
 	rel="noopener noreferrer"
 	class="Youtube"
-	style="background-image: url({thumbnailUrl}); --width: {width}; --height: {height};"
+	style="background-image: {shouldLoadThumbnail
+		? `url(${thumbnailUrl})`
+		: 'none'}; --width: {width}; --height: {height};"
 	onclick={handleClick}
 >
 	{#if showVideo}
