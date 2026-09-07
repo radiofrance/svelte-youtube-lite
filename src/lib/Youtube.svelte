@@ -75,7 +75,7 @@
 	let youtubeUrl = $derived(`https://www.youtube.com/watch?v=${id}`);
 
 	onMount(() => {
-		if (!lazy || shouldLoadThumbnail) return;
+		if (!lazy) return;
 
 		if (!('IntersectionObserver' in window)) {
 			hasLoadedThumbnail = true;
