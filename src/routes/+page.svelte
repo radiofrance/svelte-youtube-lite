@@ -3,6 +3,7 @@
 	import PlayButton from '$lib/PlayButton.svelte';
 
 	const id = 'aYtE6XE6b_s';
+	const lazyId = '9jLTaiT_cVs';
 </script>
 
 <div class="page">
@@ -23,9 +24,6 @@
 
 	<h2>Low Quality Thumbnail</h2>
 	<Youtube {id} thumbnail="mqdefault" />
-
-	<h2>Lazy Loaded Thumbnail</h2>
-	<p><a href="/page_lazy">Open the lazy loading demo page</a></p>
 
 	<h2>Custom iframe Title</h2>
 	<p><em>(YouTube iframe API fallback uses the video's title as iframe title)</em></p>
@@ -54,6 +52,10 @@
 	<h2>With custom player parameters</h2>
 	<p>Video starts at 30s and is muted</p>
 	<Youtube {id} params={{ start: '30', mute: '1' }} />
+
+	<h2>Lazy Loaded Thumbnail</h2>
+	<p>Loads only when the video enters the viewport.</p>
+	<Youtube id={lazyId} lazy title="Lazy loaded YouTube thumbnail" />
 </div>
 
 <style>
