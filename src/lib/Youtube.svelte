@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import PlayButton from './PlayButton.svelte';
 
@@ -81,8 +80,8 @@
 	let thumbnailUrl = $derived(`https://i.ytimg.com/vi/${id}/${thumbnail}.jpg`);
 	let youtubeUrl = $derived(`https://www.youtube.com/watch?v=${id}`);
 
-	onMount(() => {
-		if (!lazy) return;
+	$effect(() => {
+		if (!lazy || hasLoadedThumbnail) return;
 
 		if (!('IntersectionObserver' in window)) {
 			hasLoadedThumbnail = true;
