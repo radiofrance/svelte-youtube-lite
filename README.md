@@ -61,6 +61,16 @@ Plays `id` as part of the given playlist. `id` should belong to the playlist for
 <Youtube id="aYtE6XE6b_s" playlistId="PLxxxxxxxxxxxxxxxx" />
 ```
 
+### From a full YouTube URL
+
+`id` is optional when `url` is given: pass any watch, `youtu.be`, `embed`, `shorts` or `live` URL and `id`, `playlistId` and the `start` time (from a `t` query param) are derived from it automatically. Explicit `id`/`playlistId`/`params` props always win over what's parsed from `url`.
+
+```html
+<Youtube url="https://www.youtube.com/watch?v=aYtE6XE6b_s&t=90&list=PLxxxxxxxxxxxxxxxx" />
+```
+
+A playlist URL without a video id (e.g. `youtube.com/playlist?list=...`) requires `id` to be passed explicitly — TypeScript will flag a hardcoded URL literal that's missing one at compile time, and a `url` coming from a dynamic source (e.g. fetched at runtime) throws instead.
+
 ### Custom Play Button
 
 If you want to use a custom play button, you can use the `snippet` slot to add your own button. A `PlayButton` component is also provided if you simply want to change the `title` and `aria-label` of the default play button.
@@ -86,7 +96,7 @@ npm run dev
 
 ## Todo
 
-- [ ] support for full youtube urls (eg: with playlist and start time) ?
+- [x] support for full youtube urls (eg: with playlist and start time) ?
 - [ ] support for youtube shorts ? change from 16:9 to vertical ?
 - [ ] use DNS preconnect for all youtube iframe assets
 - [x] parameter (boolean) : load with intersection observer

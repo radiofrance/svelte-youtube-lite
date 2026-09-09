@@ -1,14 +1,39 @@
-<script lang="ts">
+<script lang="ts" generics="U extends string = string">
 	import type { Snippet } from 'svelte';
 	import PlayButton from './PlayButton.svelte';
+	import { parseYoutubeUrl, type ValidateYoutubeUrl } from './youtube-url.js';
 
 	type ThumbnailQuality = 'mqdefault' | 'hqdefault' | 'sddefault' | 'maxresdefault';
 
-	interface Props {
-		/**
-		 * YouTube video ID
-		 */
-		id: string;
+	// `url` only needs to statically embed a video id (see ValidateYoutubeUrl)
+	// when `id` isn't given explicitly; the union lets TS see that instead of
+	// validating `url` in isolation, which would flag a valid id+playlistUrl pair.
+	type IdOrUrl<U extends string> =
+		| {
+				/**
+				 * YouTube video ID.
+				 */
+				id: string;
+				/**
+				 * Any YouTube URL (watch, youtu.be, embed, shorts or live) to derive
+				 * `playlistId` and player params (e.g. `t` becomes `start`) from.
+				 * Explicit `playlistId`/`params` props always take precedence over
+				 * what's parsed from `url`.
+				 */
+				url?: string;
+		  }
+		| {
+				id?: undefined;
+				/**
+				 * Any YouTube URL (watch, youtu.be, embed, shorts or live) to derive
+				 * `id`, `playlistId` and player params (e.g. `t` becomes `start`)
+				 * from. A playlist-only URL (no video id) requires `id` to be
+				 * provided explicitly instead.
+				 */
+				url?: ValidateYoutubeUrl<U>;
+		  };
+
+	type Props = IdOrUrl<U> & {
 		/**
 		 * Appears in the iframe's title attribute and in the top section of the preview
 		 */
@@ -55,10 +80,11 @@
 		 * Additional or override parameters for the YouTube iframe
 		 */
 		params?: Record<string, string>;
-	}
+	};
 
 	let {
 		id,
+		url,
 		title = '',
 		thumbnail = 'sddefault',
 		showTitle = true,
@@ -76,16 +102,34 @@
 	let hasLoadedThumbnail = $state(false);
 	let shouldLoadThumbnail = $derived(!lazy || hasLoadedThumbnail);
 
+	// `url`'s type is branded (ValidateYoutubeUrl<U>) for callers; once past that
+	// check it's always a plain string, so parsing it back as one is safe here.
+	let parsedUrl = $derived(url ? parseYoutubeUrl(url as string, { requireId: !id }) : undefined);
+	// TS can't fully guarantee an id at the type level (e.g. plain JS callers,
+	// `as any`, or a URL that type-checks but has no video id at runtime), so
+	// this guards against silently rendering "…/undefined" URLs.
+	let effectiveId = $derived.by(() => {
+		const resolved = id ?? parsedUrl?.id;
+		if (!resolved) {
+			throw new Error(
+				'<Youtube>: could not resolve a video id. Pass `id`, or a `url` that contains one.'
+			);
+		}
+		return resolved;
+	});
+	let effectivePlaylistId = $derived(playlistId ?? parsedUrl?.playlistId);
+	let effectiveParams = $derived({ ...parsedUrl?.params, ...params });
+
 	let embedUrl = $derived(
-		`https://www.youtube-nocookie.com/embed/${id}?${new URLSearchParams({
+		`https://www.youtube-nocookie.com/embed/${effectiveId}?${new URLSearchParams({
 			autoplay: '1',
 			playsinline: '1',
-			...(playlistId ? { list: playlistId } : {}),
-			...params
+			...(effectivePlaylistId ? { list: effectivePlaylistId } : {}),
+			...effectiveParams
 		}).toString()}`
 	);
-	let thumbnailUrl = $derived(`https://i.ytimg.com/vi/${id}/${thumbnail}.jpg`);
-	let youtubeUrl = $derived(`https://www.youtube.com/watch?v=${id}`);
+	let thumbnailUrl = $derived(`https://i.ytimg.com/vi/${effectiveId}/${thumbnail}.jpg`);
+	let youtubeUrl = $derived(`https://www.youtube.com/watch?v=${effectiveId}`);
 
 	$effect(() => {
 		if (!lazy || hasLoadedThumbnail) return;

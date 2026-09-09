@@ -60,6 +60,17 @@
 	<h2>With playlist</h2>
 	<p>Plays as part of the "Official Blender Open Movies" playlist.</p>
 	<Youtube id="l5OZu-IrXpw" playlistId="PL6B3937A5D230E335" title="Singularity" />
+
+	<h2>From a full YouTube URL</h2>
+	<p>id and playlistId are both derived from a single watch URL.</p>
+	<Youtube
+		url="https://www.youtube.com/watch?v=l5OZu-IrXpw&list=PL6B3937A5D230E335"
+		title="Singularity"
+	/>
+
+	<h2>From a youtu.be URL with a timestamp</h2>
+	<p>Video starts at 30s, derived from the `t` query param.</p>
+	<Youtube url="https://youtu.be/{id}?t=30" />
 </div>
 
 <style>
