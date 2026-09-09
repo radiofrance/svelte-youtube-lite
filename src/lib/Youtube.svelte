@@ -5,20 +5,35 @@
 
 	type ThumbnailQuality = 'mqdefault' | 'hqdefault' | 'sddefault' | 'maxresdefault';
 
-	interface Props {
-		/**
-		 * YouTube video ID. Optional when `url` is a URL that embeds one
-		 * (anything but a playlist-only URL); required otherwise.
-		 */
-		id?: string;
-		/**
-		 * Any YouTube URL (watch, youtu.be, embed, shorts or live) to derive `id`,
-		 * `playlistId` and player params (e.g. `t` becomes `start`) from.
-		 * Explicit `id`/`playlistId`/`params` props always take precedence over
-		 * what's parsed from `url`. A playlist-only URL (no video id) requires
-		 * `id` to be provided explicitly.
-		 */
-		url?: ValidateYoutubeUrl<U>;
+	// `url` only needs to statically embed a video id (see ValidateYoutubeUrl)
+	// when `id` isn't given explicitly; the union lets TS see that instead of
+	// validating `url` in isolation, which would flag a valid id+playlistUrl pair.
+	type IdOrUrl<U extends string> =
+		| {
+				/**
+				 * YouTube video ID.
+				 */
+				id: string;
+				/**
+				 * Any YouTube URL (watch, youtu.be, embed, shorts or live) to derive
+				 * `playlistId` and player params (e.g. `t` becomes `start`) from.
+				 * Explicit `playlistId`/`params` props always take precedence over
+				 * what's parsed from `url`.
+				 */
+				url?: string;
+		  }
+		| {
+				id?: undefined;
+				/**
+				 * Any YouTube URL (watch, youtu.be, embed, shorts or live) to derive
+				 * `id`, `playlistId` and player params (e.g. `t` becomes `start`)
+				 * from. A playlist-only URL (no video id) requires `id` to be
+				 * provided explicitly instead.
+				 */
+				url?: ValidateYoutubeUrl<U>;
+		  };
+
+	type Props = IdOrUrl<U> & {
 		/**
 		 * Appears in the iframe's title attribute and in the top section of the preview
 		 */
