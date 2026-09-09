@@ -80,7 +80,7 @@
 		 * Additional or override parameters for the YouTube iframe
 		 */
 		params?: Record<string, string>;
-	}
+	};
 
 	let {
 		id,
@@ -104,10 +104,19 @@
 
 	// `url`'s type is branded (ValidateYoutubeUrl<U>) for callers; once past that
 	// check it's always a plain string, so parsing it back as one is safe here.
-	let parsedUrl = $derived(
-		url ? parseYoutubeUrl(url as string, { requireId: !id }) : undefined
-	);
-	let effectiveId = $derived(id ?? parsedUrl?.id);
+	let parsedUrl = $derived(url ? parseYoutubeUrl(url as string, { requireId: !id }) : undefined);
+	// TS can't fully guarantee an id at the type level (e.g. plain JS callers,
+	// `as any`, or a URL that type-checks but has no video id at runtime), so
+	// this guards against silently rendering "…/undefined" URLs.
+	let effectiveId = $derived.by(() => {
+		const resolved = id ?? parsedUrl?.id;
+		if (!resolved) {
+			throw new Error(
+				'<Youtube>: could not resolve a video id. Pass `id`, or a `url` that contains one.'
+			);
+		}
+		return resolved;
+	});
 	let effectivePlaylistId = $derived(playlistId ?? parsedUrl?.playlistId);
 	let effectiveParams = $derived({ ...parsedUrl?.params, ...params });
 
