@@ -83,14 +83,19 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		min-width: 0;
 		min-height: 3rem;
 	}
 
 	.code-block {
 		position: relative;
+		min-width: 0;
 	}
 
 	.code-block pre {
+		box-sizing: border-box;
+		width: 100%;
+		max-width: 100%;
 		margin: 0;
 		padding: 1rem;
 		padding-top: 2.75rem;
