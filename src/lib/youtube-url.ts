@@ -62,7 +62,12 @@ export function parseYoutubeUrl(
 	url: string,
 	{ requireId = true }: { requireId?: boolean } = {}
 ): ParsedYoutubeUrl {
-	const parsed = new URL(url);
+	let parsed: URL;
+	try {
+		parsed = new URL(url);
+	} catch {
+		throw new Error(`Unrecognized YouTube URL: ${url}`);
+	}
 
 	if (!isYoutubeHostname(parsed.hostname)) {
 		throw new Error(`Unrecognized YouTube URL: ${url}`);

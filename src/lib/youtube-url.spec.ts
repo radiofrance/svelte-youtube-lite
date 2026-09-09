@@ -86,4 +86,8 @@ describe('parseYoutubeUrl', () => {
 			/unrecognized/i
 		);
 	});
+
+	it('throws the same consistent error for an invalid/relative URL string', () => {
+		expect(() => parseYoutubeUrl('not a url')).toThrow(/unrecognized/i);
+	});
 });
