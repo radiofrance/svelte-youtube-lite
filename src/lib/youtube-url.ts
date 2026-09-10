@@ -25,9 +25,16 @@ export interface ParsedYoutubeUrl {
 	id?: string;
 	playlistId?: string;
 	params: Record<string, string>;
+	/**
+	 * Whether the URL points at a YouTube Short, which is filmed vertically and
+	 * therefore wants a vertical player instead of the default 16:9 one.
+	 */
+	isShort: boolean;
 }
 
-const PATH_PREFIXES = ['/embed/', '/shorts/', '/live/'];
+const SHORTS_PREFIX = '/shorts/';
+
+const PATH_PREFIXES = ['/embed/', SHORTS_PREFIX, '/live/'];
 
 const HUMAN_READABLE_TIME = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/;
 
@@ -94,6 +101,7 @@ export function parseYoutubeUrl(
 	return {
 		id,
 		playlistId: parsed.searchParams.get('list') ?? undefined,
-		params
+		params,
+		isShort: parsed.pathname.startsWith(SHORTS_PREFIX)
 	};
 }

@@ -5,6 +5,11 @@
 
 	type ThumbnailQuality = 'mqdefault' | 'hqdefault' | 'sddefault' | 'maxresdefault';
 
+	// The listed ratios are presets for autocompletion, not a constraint: any CSS
+	// ratio stays valid. (union with string) `& {}` is what keeps them visible — a bare `string`
+	// member would reduce the whole union to `string` and lose the literals.
+	type AspectRatio = '16 / 9' | '4 / 3' | '1 / 1' | '9 / 16' | (string & {});
+
 	// `url` only needs to statically embed a video id (see ValidateYoutubeUrl)
 	// when `id` isn't given explicitly; the union lets TS see that instead of
 	// validating `url` in isolation, which would flag a valid id+playlistUrl pair.
@@ -77,6 +82,16 @@
 		 * Height of the video container (e.g. '100%', '300px')
 		 */
 		height?: string;
+		/**
+		 * Aspect ratio of the player, as a CSS ratio. '16 / 9', '4 / 3', '1 / 1'
+		 * and '9 / 16' are offered as presets, but any CSS ratio is accepted
+		 * (e.g. '21 / 9', '2.35').
+		 *
+		 * Defaults to '16 / 9', or to '9 / 16' when `url` is a Shorts URL. A
+		 * Short passed as a bare `id` is indistinguishable from a regular video,
+		 * so pass '9 / 16' explicitly in that case.
+		 */
+		ratio?: AspectRatio;
 
 		/*
 		 * Additional or override parameters for the YouTube iframe
@@ -96,6 +111,7 @@
 		playlistId,
 		width = '100%',
 		height = '100%',
+		ratio,
 		params = {}
 	}: Props = $props();
 
@@ -121,6 +137,7 @@
 	});
 	let effectivePlaylistId = $derived(playlistId ?? parsedUrl?.playlistId);
 	let effectiveParams = $derived({ ...parsedUrl?.params, ...params });
+	let effectiveRatio = $derived(ratio ?? (parsedUrl?.isShort ? '9 / 16' : '16 / 9'));
 
 	let embedUrl = $derived(
 		`https://www.youtube-nocookie.com/embed/${effectiveId}?${new URLSearchParams({
@@ -175,7 +192,7 @@
 	class="Youtube"
 	style="background-image: {shouldLoadThumbnail
 		? `url(${thumbnailUrl})`
-		: 'none'}; --width: {width}; --height: {height};"
+		: 'none'}; --width: {width}; --height: {height}; --ratio: {effectiveRatio};"
 	onclick={handleClick}
 >
 	{#if showVideo}
@@ -231,7 +248,7 @@
 	.Youtube::after {
 		content: '';
 		display: block;
-		padding-bottom: calc(100% / (16 / 9));
+		padding-bottom: calc(100% / (var(--ratio)));
 	}
 
 	.Youtube iframe {

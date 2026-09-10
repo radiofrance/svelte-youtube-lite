@@ -73,6 +73,28 @@ Plays `id` as part of the given playlist. `id` should belong to the playlist for
 
 A playlist URL without a video id (e.g. `youtube.com/playlist?list=...`) requires `id` to be passed explicitly — TypeScript will flag a hardcoded URL literal that's missing one at compile time, and a `url` coming from a dynamic source (e.g. fetched at runtime) throws instead.
 
+### Aspect ratio
+
+The player is 16:9 by default. `ratio` takes any CSS ratio and suggests `16 / 9`, `4 / 3`, `1 / 1` and `9 / 16` as presets — the union stays open, so `21 / 9` or `2.35` are just as valid.
+
+```html
+<Youtube id="aYtE6XE6b_s" ratio="4 / 3" />
+```
+
+### YouTube Shorts
+
+A `shorts` URL sets `ratio` to `9 / 16` on its own, so the vertical video fills the player instead of sitting between black bars. It can be overridden by explicitly setting the `ratio` prop.
+
+```html
+<Youtube url="https://www.youtube.com/shorts/EWFiN3atGsM" />
+```
+
+A Short given as a bare `id` is indistinguishable from a regular video without asking YouTube, so pass the ratio explicitly in that case:
+
+```html
+<Youtube id="EWFiN3atGsM" ratio="9 / 16" />
+```
+
 ### Custom Play Button
 
 If you want to use a custom play button, you can use the `snippet` slot to add your own button. A `PlayButton` component is also provided if you simply want to change the `title` and `aria-label` of the default play button.
@@ -99,7 +121,7 @@ npm run dev
 ## Todo
 
 - [x] support for full youtube urls (eg: with playlist and start time) ?
-- [ ] support for youtube shorts ? change from 16:9 to vertical ?
+- [x] support for youtube shorts ? change from 16:9 to vertical ?
 - [ ] use DNS preconnect for all youtube iframe assets
 - [x] parameter (boolean) : load with intersection observer
 - [x] parameter (number) : start time
