@@ -47,7 +47,9 @@
 		 */
 		thumbnail?: ThumbnailQuality;
 		/**
-		 * Show or hide the title section in the top section of the preview
+		 * Show or hide `title` in the top section of the preview. The iframe's
+		 * `title` attribute is unaffected: it's always set when `title` is provided,
+		 * regardless of this option.
 		 */
 		showTitle?: boolean;
 		playButton?: Snippet;

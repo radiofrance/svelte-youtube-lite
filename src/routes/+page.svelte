@@ -66,8 +66,15 @@
 			<Youtube {id} title="Cute cat video" />
 		</ExampleCard>
 
-		<ExampleCard title="Without title" code={`<Youtube id="${id}" showTitle={false} />`}>
-			<Youtube {id} showTitle={false} />
+		<ExampleCard
+			title="Without a visible title"
+			code={`<Youtube id="${id}" title="Cute cat video" showTitle={false} />`}
+		>
+			{#snippet description()}
+				(the iframe still gets "Cute cat video" as its title attribute for accessibility;
+				showTitle only hides it from the visual overlay)
+			{/snippet}
+			<Youtube {id} title="Cute cat video" showTitle={false} />
 		</ExampleCard>
 
 		<ExampleCard

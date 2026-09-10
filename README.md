@@ -47,10 +47,12 @@ _(YouTube iframe API fallback uses the videos title as iframe title)_
 <Youtube id="aYtE6XE6b_s" title="Cute cat video" />
 ```
 
-### Without title
+### Without a visible title
+
+_(the iframe still gets `title` as its `title` attribute for accessibility — `showTitle="{false}"` only hides it from the visual overlay)_
 
 ```html
-<Youtube id="aYtE6XE6b_s" showTitle="{false}" />
+<Youtube id="aYtE6XE6b_s" title="Cute cat video" showTitle="{false}" />
 ```
 
 ### With playlist
