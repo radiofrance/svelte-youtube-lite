@@ -18,7 +18,7 @@
 			class="repo-link"
 			href="https://github.com/radiofrance/svelte-youtube-lite"
 			target="_blank"
-			rel="noreferrer">View on GitHub</a
+			rel="noopener noreferrer">View on GitHub</a
 		>
 	</header>
 
@@ -129,7 +129,7 @@
 
 		<ExampleCard
 			title="With playlist"
-			code="<Youtube id=&quot;l5OZu-IrXpw&quot; playlistId=&quot;PL6B3937A5D230E335&quot; title=&quot;Singularity&quot; />"
+			code='<Youtube id="l5OZu-IrXpw" playlistId="PL6B3937A5D230E335" title="Singularity" />'
 		>
 			{#snippet description()}
 				Plays as part of the "Official Blender Open Movies" playlist.

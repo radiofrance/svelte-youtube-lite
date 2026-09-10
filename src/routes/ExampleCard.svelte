@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { onDestroy } from 'svelte';
 
 	interface Props {
 		title: string;
@@ -14,11 +15,19 @@
 	let copyTimeout: ReturnType<typeof setTimeout> | undefined;
 
 	async function copyCode() {
-		await navigator.clipboard.writeText(code);
-		copied = true;
-		clearTimeout(copyTimeout);
-		copyTimeout = setTimeout(() => (copied = false), 1500);
+		try {
+			await navigator.clipboard.writeText(code);
+			copied = true;
+			clearTimeout(copyTimeout);
+			copyTimeout = setTimeout(() => (copied = false), 1500);
+		} catch (error) {
+			alert(`Failed to copy code : ${error}`);
+		}
 	}
+
+	onDestroy(() => {
+		clearTimeout(copyTimeout);
+	});
 </script>
 
 <section class="card">
