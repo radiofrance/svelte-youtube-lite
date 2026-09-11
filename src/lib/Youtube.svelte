@@ -2,8 +2,14 @@
 	import type { Snippet } from 'svelte';
 	import PlayButton from './PlayButton.svelte';
 	import { parseYoutubeUrl, type ValidateYoutubeUrl } from './youtube-url.js';
+	import { assertSafeStyleValue } from './css-value.js';
 
 	type ThumbnailQuality = 'mqdefault' | 'hqdefault' | 'sddefault' | 'maxresdefault';
+
+	// The listed ratios are presets for autocompletion, not a constraint: any CSS
+	// ratio stays valid. (union with string) `& {}` is what keeps them visible — a bare `string`
+	// member would reduce the whole union to `string` and lose the literals.
+	type AspectRatio = '16 / 9' | '4 / 3' | '1 / 1' | '9 / 16' | (string & {});
 
 	// `url` only needs to statically embed a video id (see ValidateYoutubeUrl)
 	// when `id` isn't given explicitly; the union lets TS see that instead of
@@ -70,13 +76,31 @@
 		 */
 		playlistId?: string;
 		/**
-		 * Width of the video container (e.g. '100%', '500px')
+		 * Width of the video container (e.g. '100%', '500px').
+		 *
+		 * Lands in an inline `style` attribute, so it is restricted to the
+		 * characters a CSS value needs and throws otherwise — see
+		 * `assertSafeStyleValue`.
 		 */
 		width?: string;
 		/**
-		 * Height of the video container (e.g. '100%', '300px')
+		 * Height of the video container (e.g. '100%', '300px').
+		 *
+		 * Restricted the same way as `width`.
 		 */
 		height?: string;
+		/**
+		 * Aspect ratio of the player, as a CSS ratio. '16 / 9', '4 / 3', '1 / 1'
+		 * and '9 / 16' are offered as presets, but any CSS ratio is accepted
+		 * (e.g. '21 / 9', '2.35').
+		 *
+		 * Defaults to '16 / 9', or to '9 / 16' when `url` is a Shorts URL. A
+		 * Short passed as a bare `id` is indistinguishable from a regular video,
+		 * so pass '9 / 16' explicitly in that case.
+		 *
+		 * Restricted the same way as `width`.
+		 */
+		ratio?: AspectRatio;
 
 		/*
 		 * Additional or override parameters for the YouTube iframe
@@ -96,6 +120,7 @@
 		playlistId,
 		width = '100%',
 		height = '100%',
+		ratio,
 		params = {}
 	}: Props = $props();
 
@@ -121,6 +146,13 @@
 	});
 	let effectivePlaylistId = $derived(playlistId ?? parsedUrl?.playlistId);
 	let effectiveParams = $derived({ ...parsedUrl?.params, ...params });
+	let effectiveRatio = $derived(ratio ?? (parsedUrl?.isShort ? '9 / 16' : '16 / 9'));
+
+	// Everything below goes into one inline `style` attribute, where a `;` in a
+	// value would open a further declaration — see assertSafeStyleValue.
+	let safeWidth = $derived(assertSafeStyleValue(width, 'width'));
+	let safeHeight = $derived(assertSafeStyleValue(height, 'height'));
+	let safeRatio = $derived(assertSafeStyleValue(effectiveRatio, 'ratio'));
 
 	let embedUrl = $derived(
 		`https://www.youtube-nocookie.com/embed/${effectiveId}?${new URLSearchParams({
@@ -175,7 +207,7 @@
 	class="Youtube"
 	style="background-image: {shouldLoadThumbnail
 		? `url(${thumbnailUrl})`
-		: 'none'}; --width: {width}; --height: {height};"
+		: 'none'}; --width: {safeWidth}; --height: {safeHeight}; --ratio: {safeRatio};"
 	onclick={handleClick}
 >
 	{#if showVideo}
@@ -231,7 +263,7 @@
 	.Youtube::after {
 		content: '';
 		display: block;
-		padding-bottom: calc(100% / (16 / 9));
+		padding-bottom: calc(100% / (var(--ratio)));
 	}
 
 	.Youtube iframe {

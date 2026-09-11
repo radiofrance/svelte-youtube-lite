@@ -32,6 +32,23 @@ describe('parseYoutubeUrl', () => {
 		expect(result.id).toBe('aYtE6XE6b_s');
 	});
 
+	it('flags a shorts URL as a short', () => {
+		const result = parseYoutubeUrl('https://www.youtube.com/shorts/aYtE6XE6b_s');
+
+		expect(result.isShort).toBe(true);
+	});
+
+	it.each([
+		'https://www.youtube.com/watch?v=aYtE6XE6b_s',
+		'https://youtu.be/aYtE6XE6b_s',
+		'https://www.youtube.com/embed/aYtE6XE6b_s',
+		'https://www.youtube.com/live/aYtE6XE6b_s'
+	])('does not flag %s as a short', (url) => {
+		const result = parseYoutubeUrl(url);
+
+		expect(result.isShort).toBe(false);
+	});
+
 	it('extracts the playlist id from the list query param', () => {
 		const result = parseYoutubeUrl(
 			'https://www.youtube.com/watch?v=l5OZu-IrXpw&list=PL6B3937A5D230E335'

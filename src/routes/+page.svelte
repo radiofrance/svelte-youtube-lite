@@ -5,6 +5,9 @@
 
 	const id = 'aYtE6XE6b_s';
 	const lazyId = '9jLTaiT_cVs';
+	const playlistVideoId = 'l5OZu-IrXpw';
+	const playlistId = 'PL6B3937A5D230E335';
+	const shortId = '6IlJ-caK_7A';
 </script>
 
 <div class="page">
@@ -71,8 +74,8 @@
 			code={`<Youtube id="${id}" title="Cute cat video" showTitle={false} />`}
 		>
 			{#snippet description()}
-				(the iframe still gets "Cute cat video" as its title attribute for accessibility;
-				showTitle only hides it from the visual overlay)
+				(the iframe still gets "Cute cat video" as its title attribute for accessibility; showTitle
+				only hides it from the visual overlay)
 			{/snippet}
 			<Youtube {id} title="Cute cat video" showTitle={false} />
 		</ExampleCard>
@@ -136,12 +139,12 @@
 
 		<ExampleCard
 			title="With playlist"
-			code='<Youtube id="l5OZu-IrXpw" playlistId="PL6B3937A5D230E335" title="Singularity" />'
+			code={`<Youtube id="${playlistVideoId}" playlistId="${playlistId}" title="Singularity" />`}
 		>
 			{#snippet description()}
 				Plays as part of the "Official Blender Open Movies" playlist.
 			{/snippet}
-			<Youtube id="l5OZu-IrXpw" playlistId="PL6B3937A5D230E335" title="Singularity" />
+			<Youtube id={playlistVideoId} {playlistId} title="Singularity" />
 		</ExampleCard>
 
 		<ExampleCard
@@ -168,6 +171,29 @@
 				Video starts at 30s, derived from the `t` query param.
 			{/snippet}
 			<Youtube url="https://youtu.be/{id}?t=30" />
+		</ExampleCard>
+
+		<ExampleCard
+			title="YouTube Short from its URL"
+			code={`<Youtube url="https://www.youtube.com/shorts/${shortId}" width="270px" />`}
+		>
+			{#snippet description()}
+				A shorts URL switches the player to a 9 / 16 ratio on its own, so the vertical video fills
+				it instead of being letterboxed. It can be overridden by explicitly setting the `ratio`
+				prop.
+			{/snippet}
+			<Youtube url="https://www.youtube.com/shorts/{shortId}" width="270px" />
+		</ExampleCard>
+
+		<ExampleCard
+			title="Explicit aspect ratio"
+			code={`<Youtube id="${shortId}" ratio="9 / 16" width="270px" />`}
+		>
+			{#snippet description()}
+				A bare Short id looks like any other video id, so pass `ratio` yourself. '16 / 9', '4 / 3',
+				'1 / 1' and '9 / 16' are offered as presets, and any other CSS ratio works too.
+			{/snippet}
+			<Youtube id={shortId} ratio="9 / 16" width="270px" />
 		</ExampleCard>
 	</div>
 </div>
