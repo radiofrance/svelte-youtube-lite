@@ -1,6 +1,6 @@
 {
 	"name": "svelte-youtube-lite",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"description": "A Svelte 5 component for YouTube embeds with a focus on performance and privacy (GDPR compliant) — loads only the thumbnail until the visitor presses play.",
 	"keywords": [
 		"svelte",
