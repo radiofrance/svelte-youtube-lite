@@ -8,7 +8,24 @@
 	const playlistVideoId = 'l5OZu-IrXpw';
 	const playlistId = 'PL6B3937A5D230E335';
 	const shortId = '6IlJ-caK_7A';
+
+	const description =
+		'A Svelte 5 component for YouTube embeds with a focus on performance and privacy (GDPR compliant) — loads only the thumbnail until the visitor presses play.';
+	const siteUrl = 'https://svelte-youtube-lite.vercel.app/';
+	const repoUrl = 'https://github.com/radiofrance/svelte-youtube-lite';
+	const npmUrl = 'https://www.npmjs.com/package/svelte-youtube-lite';
 </script>
+
+<svelte:head>
+	<title>svelte-youtube-lite — lightweight, privacy-friendly YouTube embeds for Svelte</title>
+	<meta name="description" content={description} />
+	<link rel="canonical" href={siteUrl} />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="svelte-youtube-lite" />
+	<meta property="og:description" content={description} />
+	<meta property="og:url" content={siteUrl} />
+	<meta name="twitter:card" content="summary" />
+</svelte:head>
 
 <div class="page">
 	<header class="hero">
@@ -17,12 +34,11 @@
 			A lightweight Svelte wrapper around the YouTube embed, loading only a thumbnail until the user
 			presses play.
 		</p>
-		<a
-			class="repo-link"
-			href="https://github.com/radiofrance/svelte-youtube-lite"
-			target="_blank"
-			rel="noopener noreferrer">View on GitHub</a
-		>
+		<nav class="hero-links" aria-label="Project links">
+			<a href={repoUrl} target="_blank" rel="noopener noreferrer">GitHub</a>
+			<a href={npmUrl} target="_blank" rel="noopener noreferrer">npm</a>
+			<a href="{repoUrl}/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+		</nav>
 	</header>
 
 	<div class="examples">
@@ -260,14 +276,20 @@
 		color: var(--text-muted);
 	}
 
-	.repo-link {
-		display: inline-block;
+	.hero-links {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.5rem 1.25rem;
+	}
+
+	.hero-links a {
 		color: var(--accent);
 		font-weight: 600;
 		text-decoration: none;
 	}
 
-	.repo-link:hover {
+	.hero-links a:hover {
 		text-decoration: underline;
 	}
 
