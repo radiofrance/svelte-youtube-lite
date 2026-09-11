@@ -111,7 +111,7 @@ A click on the preview has to resolve DNS, open a TCP connection and negotiate T
 <Youtube id="aYtE6XE6b_s" preconnect="eager" />
 ```
 
-Only those two hosts are warmed. A `youtube-nocookie` embed serves its player CSS and JS from its own origin, so the hosts usually listed for YouTube embeds — `s.ytimg.com`, `www.google.com`, `googleads.g.doubleclick.net`, `static.doubleclick.net` — are never contacted by one; preconnecting to them would leak the visitor's IP to Google's ad hosts before any click, which is what this library exists to avoid. The video stream itself comes from `*.googlevideo.com`, whose hostname the player resolves at playback time, so there is nothing to warm up there in advance.
+Only those two hosts are warmed. A `youtube-nocookie` embed serves its player CSS and JS from its own origin, so the hosts usually listed for YouTube embeds — `s.ytimg.com`, `www.google.com`, `googleads.g.doubleclick.net`, `static.doubleclick.net` — are never contacted by it; preconnecting to them would leak the visitor's IP to Google's ad hosts before any click, which is what this library exists to avoid. The video stream itself comes from `*.googlevideo.com`, whose hostname the player resolves at playback time, so there is nothing to warm up there in advance.
 
 With `lazy`, an off-screen preview warms nothing until it enters the viewport.
 
