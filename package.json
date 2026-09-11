@@ -1,6 +1,7 @@
 {
 	"name": "svelte-youtube-lite",
 	"version": "1.4.0",
+	"license": "MIT",
 	"repository": "github:radiofrance/svelte-youtube-lite",
 	"scripts": {
 		"dev": "vite dev",
