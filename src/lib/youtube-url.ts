@@ -102,6 +102,6 @@ export function parseYoutubeUrl(
 		id,
 		playlistId: parsed.searchParams.get('list') ?? undefined,
 		params,
-		isShort: parsed.pathname.startsWith(SHORTS_PREFIX)
+		isShort: parsed.pathname.startsWith(SHORTS_PREFIX) || parsed.pathname === SHORTS_PREFIX.slice(0, -1)
 	};
 }

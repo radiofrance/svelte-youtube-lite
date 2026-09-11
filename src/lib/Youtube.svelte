@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import PlayButton from './PlayButton.svelte';
 	import { parseYoutubeUrl, type ValidateYoutubeUrl } from './youtube-url.js';
+	import { assertSafeStyleValue } from './css-value.js';
 
 	type ThumbnailQuality = 'mqdefault' | 'hqdefault' | 'sddefault' | 'maxresdefault';
 
@@ -75,11 +76,17 @@
 		 */
 		playlistId?: string;
 		/**
-		 * Width of the video container (e.g. '100%', '500px')
+		 * Width of the video container (e.g. '100%', '500px').
+		 *
+		 * Lands in an inline `style` attribute, so it is restricted to the
+		 * characters a CSS value needs and throws otherwise — see
+		 * `assertSafeStyleValue`.
 		 */
 		width?: string;
 		/**
-		 * Height of the video container (e.g. '100%', '300px')
+		 * Height of the video container (e.g. '100%', '300px').
+		 *
+		 * Restricted the same way as `width`.
 		 */
 		height?: string;
 		/**
@@ -90,6 +97,8 @@
 		 * Defaults to '16 / 9', or to '9 / 16' when `url` is a Shorts URL. A
 		 * Short passed as a bare `id` is indistinguishable from a regular video,
 		 * so pass '9 / 16' explicitly in that case.
+		 *
+		 * Restricted the same way as `width`.
 		 */
 		ratio?: AspectRatio;
 
@@ -138,6 +147,12 @@
 	let effectivePlaylistId = $derived(playlistId ?? parsedUrl?.playlistId);
 	let effectiveParams = $derived({ ...parsedUrl?.params, ...params });
 	let effectiveRatio = $derived(ratio ?? (parsedUrl?.isShort ? '9 / 16' : '16 / 9'));
+
+	// Everything below goes into one inline `style` attribute, where a `;` in a
+	// value would open a further declaration — see assertSafeStyleValue.
+	let safeWidth = $derived(assertSafeStyleValue(width, 'width'));
+	let safeHeight = $derived(assertSafeStyleValue(height, 'height'));
+	let safeRatio = $derived(assertSafeStyleValue(effectiveRatio, 'ratio'));
 
 	let embedUrl = $derived(
 		`https://www.youtube-nocookie.com/embed/${effectiveId}?${new URLSearchParams({
@@ -192,7 +207,7 @@
 	class="Youtube"
 	style="background-image: {shouldLoadThumbnail
 		? `url(${thumbnailUrl})`
-		: 'none'}; --width: {width}; --height: {height}; --ratio: {effectiveRatio};"
+		: 'none'}; --width: {safeWidth}; --height: {safeHeight}; --ratio: {safeRatio};"
 	onclick={handleClick}
 >
 	{#if showVideo}

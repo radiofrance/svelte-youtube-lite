@@ -81,6 +81,8 @@ The player is 16:9 by default. `ratio` takes any CSS ratio and suggests `16 / 9`
 <Youtube id="aYtE6XE6b_s" ratio="4 / 3" />
 ```
 
+`width`, `height` and `ratio` are concatenated into the component's inline `style` attribute, so they accept only the characters a CSS value needs — letters, digits, whitespace and `. , % / ( ) + - *` — and throw on anything else. That keeps a caller who forwards untrusted data into one of these props from injecting further declarations, such as a `background-image: url(…)` pointing at a host of their choosing.
+
 ### YouTube Shorts
 
 A `shorts` URL sets `ratio` to `9 / 16` on its own, so the vertical video fills the player instead of sitting between black bars. It can be overridden by explicitly setting the `ratio` prop.
