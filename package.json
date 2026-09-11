@@ -1,8 +1,30 @@
 {
 	"name": "svelte-youtube-lite",
 	"version": "1.4.0",
+	"description": "A Svelte 5 component for YouTube embeds with a focus on performance and privacy (GDPR compliant) — loads only the thumbnail until the visitor presses play.",
+	"keywords": [
+		"svelte",
+		"svelte-component",
+		"youtube",
+		"youtube-embed",
+		"youtube-shorts",
+		"embed",
+		"iframe",
+		"lazy-loading",
+		"performance",
+		"privacy",
+		"gdpr",
+		"nocookie"
+	],
 	"license": "MIT",
-	"repository": "github:radiofrance/svelte-youtube-lite",
+	"homepage": "https://svelte-youtube-lite.vercel.app",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/radiofrance/svelte-youtube-lite.git"
+	},
+	"bugs": {
+		"url": "https://github.com/radiofrance/svelte-youtube-lite/issues"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
