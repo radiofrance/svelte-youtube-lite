@@ -9,6 +9,13 @@ function styleOf(props: Record<string, unknown>): string {
 	return body.match(/style="[^"]*"/)?.[0] ?? '';
 }
 
+function preconnectedHosts(props: Record<string, unknown>): string[] {
+	const { head } = render(Youtube, { props });
+	return [...head.matchAll(/<link rel="preconnect" href="https:\/\/([^"]+)"/g)].map(
+		([, host]) => host
+	);
+}
+
 describe('Youtube', () => {
 	it('derives a vertical ratio from a shorts URL', () => {
 		expect(styleOf({ url: 'https://www.youtube.com/shorts/EWFiN3atGsM' })).toContain(
@@ -36,4 +43,30 @@ describe('Youtube', () => {
 			);
 		}
 	);
+});
+
+describe('Youtube preconnect', () => {
+	it('warms the thumbnail host on render, but not the player host', () => {
+		expect(preconnectedHosts({ id: 'aYtE6XE6b_s' })).toEqual(['i.ytimg.com']);
+	});
+
+	it('warms nothing for a lazy preview that has not entered the viewport yet', () => {
+		expect(preconnectedHosts({ id: 'aYtE6XE6b_s', lazy: true })).toEqual([]);
+	});
+
+	it('warms both hosts on render in eager mode, lazy preview included', () => {
+		expect(preconnectedHosts({ id: 'aYtE6XE6b_s', lazy: true, preconnect: 'eager' })).toEqual([
+			'i.ytimg.com',
+			'www.youtube-nocookie.com'
+		]);
+	});
+
+	it('warms nothing at all in none mode', () => {
+		expect(preconnectedHosts({ id: 'aYtE6XE6b_s', preconnect: 'none' })).toEqual([]);
+	});
+
+	it('leaves the link uncredentialed, so it warms the pool the iframe and image use', () => {
+		const { head } = render(Youtube, { props: { id: 'aYtE6XE6b_s', preconnect: 'eager' } });
+		expect(head).not.toContain('crossorigin');
+	});
 });
