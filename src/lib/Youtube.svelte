@@ -3,6 +3,7 @@
 	import PlayButton from './PlayButton.svelte';
 	import { parseYoutubeUrl, type ValidateYoutubeUrl } from './youtube-url.js';
 	import { assertSafeStyleValue } from './css-value.js';
+	import { preconnectOrigins, type PreconnectMode } from './preconnect.js';
 
 	type ThumbnailQuality = 'mqdefault' | 'hqdefault' | 'sddefault' | 'maxresdefault';
 
@@ -101,6 +102,17 @@
 		 * Restricted the same way as `width`.
 		 */
 		ratio?: AspectRatio;
+		/**
+		 * When to open connections to the hosts the player needs, so that a click
+		 * spends its time fetching rather than shaking hands.
+		 *
+		 * 'hover' (default) warms the thumbnail host as the preview loads and the
+		 * player host on the first pointer, focus or touch — nobody is contacted
+		 * ahead of an actual need. 'eager' warms both as soon as the component
+		 * renders, which costs a connection even for a visitor who never plays.
+		 * 'none' emits nothing.
+		 */
+		preconnect?: PreconnectMode;
 
 		/*
 		 * Additional or override parameters for the YouTube iframe
@@ -121,6 +133,7 @@
 		width = '100%',
 		height = '100%',
 		ratio,
+		preconnect = 'hover',
 		params = {}
 	}: Props = $props();
 
@@ -128,6 +141,15 @@
 	let element: HTMLAnchorElement | undefined;
 	let hasLoadedThumbnail = $state(false);
 	let shouldLoadThumbnail = $derived(!lazy || hasLoadedThumbnail);
+	// Flipped by the first sign that the visitor is heading for the play button,
+	// which is early enough for the handshake to overlap the click.
+	let hasWarmedConnections = $state(false);
+	let preconnectHosts = $derived(
+		preconnectOrigins(preconnect, {
+			loadsThumbnail: shouldLoadThumbnail,
+			warmed: hasWarmedConnections
+		})
+	);
 
 	// `url`'s type is branded (ValidateYoutubeUrl<U>) for callers; once past that
 	// check it's always a plain string, so parsing it back as one is safe here.
@@ -192,12 +214,22 @@
 		};
 	});
 
+	function warmConnections() {
+		hasWarmedConnections = true;
+	}
+
 	async function handleClick(event: MouseEvent) {
 		if (event.metaKey || event.ctrlKey) return;
 		event.preventDefault();
 		showVideo = true;
 	}
 </script>
+
+<svelte:head>
+	{#each preconnectHosts as host (host)}
+		<link rel="preconnect" href={host} />
+	{/each}
+</svelte:head>
 
 <a
 	bind:this={element}
@@ -209,6 +241,9 @@
 		? `url(${thumbnailUrl})`
 		: 'none'}; --width: {safeWidth}; --height: {safeHeight}; --ratio: {safeRatio};"
 	onclick={handleClick}
+	onpointerenter={warmConnections}
+	onfocusin={warmConnections}
+	ontouchstart={warmConnections}
 >
 	{#if showVideo}
 		<iframe

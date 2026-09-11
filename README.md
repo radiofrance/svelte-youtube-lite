@@ -97,6 +97,24 @@ A Short given as a bare `id` is indistinguishable from a regular video without a
 <Youtube id="EWFiN3atGsM" ratio="9 / 16" />
 ```
 
+### Preconnect
+
+A click on the preview has to resolve DNS, open a TCP connection and negotiate TLS before the player can even start downloading. `preconnect` gets that out of the way ahead of time:
+
+| value               | behavior                                                                                                                                                  |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hover` _(default)_ | Warms `i.ytimg.com` while the preview thumbnail loads, and `www.youtube-nocookie.com` on the first pointer, focus or touch — nothing before it is needed. |
+| `eager`             | Warms both hosts as soon as the component renders, server-side rendering included.                                                                        |
+| `none`              | Emits nothing.                                                                                                                                            |
+
+```html
+<Youtube id="aYtE6XE6b_s" preconnect="eager" />
+```
+
+Only those two hosts are warmed. A `youtube-nocookie` embed serves its player CSS and JS from its own origin, so the hosts usually listed for YouTube embeds — `s.ytimg.com`, `www.google.com`, `googleads.g.doubleclick.net`, `static.doubleclick.net` — are never contacted by one; preconnecting to them would leak the visitor's IP to Google's ad hosts before any click, which is what this library exists to avoid. The video stream itself comes from `*.googlevideo.com`, whose hostname the player resolves at playback time, so there is nothing to warm up there in advance.
+
+With `lazy`, an off-screen preview warms nothing until it enters the viewport.
+
 ### Custom Play Button
 
 If you want to use a custom play button, you can use the `snippet` slot to add your own button. A `PlayButton` component is also provided if you simply want to change the `title` and `aria-label` of the default play button.
@@ -124,7 +142,7 @@ npm run dev
 
 - [x] support for full youtube urls (eg: with playlist and start time) ?
 - [x] support for youtube shorts ? change from 16:9 to vertical ?
-- [ ] use DNS preconnect for all youtube iframe assets
+- [x] use DNS preconnect for all youtube iframe assets
 - [x] parameter (boolean) : load with intersection observer
 - [x] parameter (number) : start time
 - [x] parameter (string) : playlist id

@@ -195,6 +195,16 @@
 			{/snippet}
 			<Youtube id={shortId} ratio="9 / 16" width="270px" />
 		</ExampleCard>
+
+		<ExampleCard title="Eager preconnect" code={`<Youtube id="${id}" preconnect="eager" />`}>
+			{#snippet description()}
+				Connections to the thumbnail and player hosts are normally opened as they are needed: the
+				thumbnail host while the preview loads, the player host on the first pointer, focus or
+				touch. `eager` opens both as soon as the component renders, which suits a player the visitor
+				is expected to start right away. `none` opens neither.
+			{/snippet}
+			<Youtube {id} preconnect="eager" width="270px" />
+		</ExampleCard>
 	</div>
 </div>
 
