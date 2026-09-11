@@ -1,9 +1,14 @@
 # svelte-youtube-lite
 
+[![npm version](https://img.shields.io/npm/v/svelte-youtube-lite?logo=npm&color=cb3837)](https://www.npmjs.com/package/svelte-youtube-lite)
+[![license](https://img.shields.io/npm/l/svelte-youtube-lite)](https://github.com/radiofrance/svelte-youtube-lite/blob/main/LICENSE)
+
 A simple svelte component for creating YouTube embeds with a focus on performance and privacy (GDPR compliant).
 
 - Loads the video thumbnail on page load
 - Creates the embed when the thumbnail is clicked
+
+**[Live demo](https://svelte-youtube-lite.vercel.app)** &middot; [npm](https://www.npmjs.com/package/svelte-youtube-lite) &middot; [GitHub](https://github.com/radiofrance/svelte-youtube-lite) &middot; [Issues](https://github.com/radiofrance/svelte-youtube-lite/issues)
 
 ## Compatibility
 
@@ -17,7 +22,7 @@ npm install -D svelte-youtube-lite
 
 ## Usage
 
-_Run the [demo page](#run-demo-locally) locally for a preview_
+_Every example below is live on the [demo page](https://svelte-youtube-lite.vercel.app), which you can also [run locally](#run-demo-locally)._
 
 ### Import
 
@@ -138,6 +143,8 @@ npm i
 npm run dev
 ```
 
+The demo page is deployed from `main` at [svelte-youtube-lite.vercel.app](https://svelte-youtube-lite.vercel.app).
+
 ## Todo
 
 - [x] support for full youtube urls (eg: with playlist and start time) ?
@@ -147,3 +154,7 @@ npm run dev
 - [x] parameter (number) : start time
 - [x] parameter (string) : playlist id
 - [ ] fallback to YouTube iframe API for browsers with bad autoplay support
+
+## License
+
+[MIT](https://github.com/radiofrance/svelte-youtube-lite/blob/main/LICENSE) &copy; Radio France
